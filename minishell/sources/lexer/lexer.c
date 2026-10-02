@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+
+
 /*
  * Advances *i to the end of one word: stops at a metachar:
  * (space, tab, | < >) unless inside quotes. Quotes are kept as per bash.
