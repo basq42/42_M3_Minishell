@@ -1,0 +1,85 @@
+#include "minishell.h"
+
+/*
+ * Prints "minishell: a: b" and exits the process with status.
+ * Never returns: CHILD ONLY and in the parent it would kill the shell!!
+ * Called by: exec_external, find_in_path;
+ */
+void	exec_fail(t_shell *sh, char *a, char *b, int status)
+{
+	print_error(a, b, NULL);
+	shell_exit(sh, status);
+}
+
+/*
+ * Finds, checks and execve an external command.
+ * Never returns: exits 127/126/1 with a bash style failure message.
+ * CHILD ONLY. Called by: child_process.
+ * */
+void	exec_external(t_shell *sh, char **argv)
+{
+	char	*path;
+	char	**envp;
+	int		status;
+
+	if (argv[0][0] == '\0')
+		exec_fail(sh, "", "command not found", 127);
+	if (ft_strchr(argv[0], '/'))
+		path = ft_strdup(argv[0]);
+	else
+		path = find_in_path(sh, argv[0]);
+	if (!path)
+		exec_fail(sh, "out of memory", NULL, 1);
+	status = check_exec_path(argv[0], path);
+	if (status != 0)
+	{
+		free(path);
+		shell_exit(sh, status);
+	}
+	envp = env_to_array(sh->env);
+	if (envp)
+		execve(path, argv, envp);
+	print_error(argv[0], strerror(errno), NULL);
+	free(path);
+	free_strarr(envp);
+	shell_exit(sh, 126);
+}
+
+/*
+ * Every forked pipeline child: connects pipe ends to stdin and stdout,
+ * applies the command's redirections (which override the pipe),
+ * then runs a bultin or an external command.
+ * No return. Called by: spawn_one, right after fork() call.
+ */
+void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
+{
+	set_signals_default();
+	if (p->prev_read != -1)
+	{
+		dup2(p->prev_read, STDIN_FILENO);
+		close(p->prev_read);
+	}
+	if (p->fd[1] != -1)
+	{
+		dup2(p->fd[1], STDOUT_FILENO);
+		close(p->fd[1]);
+	}
+	if (p->fd[0] != -1)
+		close(p->fd[0]);
+	if (apply_redirections(cmd->argv[0]))
+		shell_exit(sh, run_builtin(sh, cmd->argv));
+	exec_external(sh, cmd->argv);
+}
+
+/*	PSEUDO CODE FOR EXTERNAL FUNCTIONS CALLED HERE
+ *	apply_redirs(r)           -> redirect.c   open each redir in order,
+		dup2 onto 0/1, close; 0 ok, 1 fail
+is_builtin(name)         
+	-> teammate     1 for echo cd pwd export unset env exit
+run_builtin(sh, argv)     -> teammate     runs it, returns status
+set_signals_default()     -> teammate     SIGINT/SIGQUIT back to SIG_DFL
+env_to_array(env)         -> env_array.c  "KEY=value" char ** for execve,
+	NULL on oom
+shell_exit(sh, status)    -> shell_exit.c env_free, free_cmds, rl_clear_history,
+	exit
+ */
