@@ -13,8 +13,8 @@ minishell/
     │   ├── run_line.c         run_line, report_stage_error <i>[ND]</i>
     │   └── shell_exit.c       shell_exit <i>[ND]</i>
     ├── utils/                 <b>[baran]</b>
-    │   ├── error.c            print_error <i>[ND]</i>
-    │   ├── free.c             free_strarr, free_tokens, free_redirs, free_cmds <i>[ND]</i>
+    │   ├── error.c            print_error <i>[D]</i>
+    │   ├── free.c             free_strarr, free_tokens, free_redirs, free_cmds <i>[D]</i>
     │   └── str_utils.c        is_space, is_meta <i>[D]</i>
     ├── env/                   <b>[baran]</b>
     │   ├── env_init.c         env_init, env_new, env_add_back, env_free <i>[ND]</i>
