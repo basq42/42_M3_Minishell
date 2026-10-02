@@ -1,3 +1,46 @@
+# Structure
+minishell/
+├── Makefile
+├── README.md
+├── includes/
+│   └── minishell.h            every include, the global, enums, structs, all prototypes
+├── libft/                     your libft, with its own Makefile
+└── sources/
+    ├── main.c					[bahtiyor] prompt loop
+    ├── shell/					[baran]
+    │   ├── shell_init.c       shell_init [ND]
+    │   ├── run_line.c         run_line, report_stage_error [ND]
+    │   └── shell_exit.c       shell_exit [ND]
+    ├── utils/					[baran]
+    │   ├── error.c            print_error [ND]
+    │   ├── free.c             free_strarr, free_tokens, free_redirs, free_cmds [ND]
+    │   └── str_utils.c        is_space, is_meta [D]
+    ├── env/					[baran]
+    │   ├── env_init.c         env_init, env_new, env_add_back, env_free [ND]
+    │   ├── env_access.c       env_get, env_set, env_unset [ND]
+    │   └── env_array.c        env_to_array, env_count [ND]
+    ├── lexer/					[baran + bahtiyor]
+    │   ├── lexer.c            lexer, read_operator, read_word [D]
+    │   └── token.c            token_new, token_add_back, token_text [D]
+    ├── parser/					[baran + bahtiyor]
+    │   ├── parser.c           parser, parse_command [ND]
+    │   ├── syntax.c           syntax_check, syntax_error [ND]
+    │   └── cmd.c              cmd_new, cmd_add_back, argv_append, redir_append [ND]
+    ├── heredoc/				[baran]
+    │   ├── heredoc.c          heredoc_collect, heredoc_one, hd_make_path [ND]
+    │   ├── heredoc_child.c    hd_child, hd_read_loop [ND]
+    │   └── heredoc_cleanup.c  heredoc_cleanup [ND]
+    ├── executor/				[baran]
+    │   ├── execute.c          execute, run_builtin_parent [ND]
+    │   ├── pipeline.c         run_pipeline, spawn_one [D]
+    │   ├── child.c            child_process, exec_external [D]
+	|	|-- wait.c				wait_children, report_signal, decode_status [D]
+    │   ├── path.c             find_in_path, check_exec_path [D]
+    │   └── redirect.c         apply_redirs, open_redir [ND]
+    ├── expander/              [bahtiyor]
+    ├── signals/               [bahtiyor]
+    └── builtins/              [bahtiyor]
+
 Shell Execution Flow [REPL]:
 	*-->Read user input-->Parse the input into commands-->Execute-->Wait for finish-->*
 

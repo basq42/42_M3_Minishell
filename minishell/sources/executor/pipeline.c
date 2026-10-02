@@ -57,7 +57,7 @@ int	run_pipeline(t_shell *sh)
 
 	p.prev_read = -1;
 	p.last_pid = -1;
-	set_signals_ignore();
+	set_signals_ignore();	//for the parent to ignore ctrl-c while waiting.
 	cmd = sh->cmds;
 	while (cmd)
 	{
