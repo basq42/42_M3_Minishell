@@ -1,4 +1,5 @@
 # Structure
+```text
 minishell/
 ├── Makefile
 ├── README.md
@@ -40,7 +41,7 @@ minishell/
     ├── expander/              [bahtiyor]
     ├── signals/               [bahtiyor]
     └── builtins/              [bahtiyor]
-
+```
 Shell Execution Flow [REPL]:
 	*-->Read user input-->Parse the input into commands-->Execute-->Wait for finish-->*
 
