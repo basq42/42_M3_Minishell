@@ -1,5 +1,5 @@
 # Structure
-```text
+<pre>
 minishell/
 ├── Makefile
 ├── README.md
@@ -7,41 +7,42 @@ minishell/
 │   └── minishell.h            every include, the global, enums, structs, all prototypes
 ├── libft/                     your libft, with its own Makefile
 └── sources/
-    ├── main.c					[bahtiyor] prompt loop
-    ├── shell/					[baran]
-    │   ├── shell_init.c       shell_init [ND]
-    │   ├── run_line.c         run_line, report_stage_error [ND]
-    │   └── shell_exit.c       shell_exit [ND]
-    ├── utils/					[baran]
-    │   ├── error.c            print_error [ND]
-    │   ├── free.c             free_strarr, free_tokens, free_redirs, free_cmds [ND]
-    │   └── str_utils.c        is_space, is_meta [D]
-    ├── env/					[baran]
-    │   ├── env_init.c         env_init, env_new, env_add_back, env_free [ND]
-    │   ├── env_access.c       env_get, env_set, env_unset [ND]
-    │   └── env_array.c        env_to_array, env_count [ND]
-    ├── lexer/					[baran + bahtiyor]
-    │   ├── lexer.c            lexer, read_operator, read_word [D]
-    │   └── token.c            token_new, token_add_back, token_text [D]
-    ├── parser/					[baran + bahtiyor]
-    │   ├── parser.c           parser, parse_command [ND]
-    │   ├── syntax.c           syntax_check, syntax_error [ND]
-    │   └── cmd.c              cmd_new, cmd_add_back, argv_append, redir_append [ND]
-    ├── heredoc/				[baran]
-    │   ├── heredoc.c          heredoc_collect, heredoc_one, hd_make_path [ND]
-    │   ├── heredoc_child.c    hd_child, hd_read_loop [ND]
-    │   └── heredoc_cleanup.c  heredoc_cleanup [ND]
-    ├── executor/				[baran]
-    │   ├── execute.c          execute, run_builtin_parent [ND]
-    │   ├── pipeline.c         run_pipeline, spawn_one [D]
-    │   ├── child.c            child_process, exec_external [D]
-	|	|-- wait.c				wait_children, report_signal, decode_status [D]
-    │   ├── path.c             find_in_path, check_exec_path [D]
-    │   └── redirect.c         apply_redirs, open_redir [ND]
-    ├── expander/              [bahtiyor]
-    ├── signals/               [bahtiyor]
-    └── builtins/              [bahtiyor]
-```
+    ├── main.c                 <b>[bahtiyor]</b> prompt loop
+    ├── shell/                 <b>[baran]</b>
+    │   ├── shell_init.c       shell_init <i>[ND]</i>
+    │   ├── run_line.c         run_line, report_stage_error <i>[ND]</i>
+    │   └── shell_exit.c       shell_exit <i>[ND]</i>
+    ├── utils/                 <b>[baran]</b>
+    │   ├── error.c            print_error <i>[ND]</i>
+    │   ├── free.c             free_strarr, free_tokens, free_redirs, free_cmds <i>[ND]</i>
+    │   └── str_utils.c        is_space, is_meta <i>[D]</i>
+    ├── env/                   <b>[baran]</b>
+    │   ├── env_init.c         env_init, env_new, env_add_back, env_free <i>[ND]</i>
+    │   ├── env_access.c       env_get, env_set, env_unset <i>[ND]</i>
+    │   └── env_array.c        env_to_array, env_count <i>[ND]</i>
+    ├── lexer/                 <b>[baran + bahtiyor]</b>
+    │   ├── lexer.c            lexer, read_operator, read_word <i>[D]</i>
+    │   └── token.c            token_new, token_add_back, token_text <i>[D]</i>
+    ├── parser/                <b>[baran + bahtiyor]</b>
+    │   ├── parser.c           parser, parse_command <i>[ND]</i>
+    │   ├── syntax.c           syntax_check, syntax_error <i>[ND]</i>
+    │   └── cmd.c              cmd_new, cmd_add_back, argv_append, redir_append <i>[ND]</i>
+    ├── heredoc/               <b>[baran]</b>
+    │   ├── heredoc.c          heredoc_collect, heredoc_one, hd_make_path <i>[ND]</i>
+    │   ├── heredoc_child.c    hd_child, hd_read_loop <i>[ND]</i>
+    │   └── heredoc_cleanup.c  heredoc_cleanup <i>[ND]</i>
+    ├── executor/              <b>[baran]</b>
+    │   ├── execute.c          execute, run_builtin_parent <i>[ND]</i>
+    │   ├── pipeline.c         run_pipeline, spawn_one <i>[D]</i>
+    │   ├── child.c            child_process, exec_external <i>[D]</i>
+    │   ├── wait.c             wait_children, report_signal, decode_status <i>[D]</i>
+    │   ├── path.c             find_in_path, check_exec_path <i>[D]</i>
+    │   └── redirect.c         apply_redirs, open_redir <i>[ND]</i>
+    ├── expander/              <b>[bahtiyor]</b>
+    ├── signals/               <b>[bahtiyor]</b>
+    └── builtins/              <b>[bahtiyor]</b>
+</pre>
+
 Shell Execution Flow [REPL]:
 	*-->Read user input-->Parse the input into commands-->Execute-->Wait for finish-->*
 
