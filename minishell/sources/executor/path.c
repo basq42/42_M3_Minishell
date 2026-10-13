@@ -13,8 +13,8 @@ static char	*search_directories(char **dirs, char *name, int *oom)
 	char	*full;
 	int		i;
 
-	i = -1;
-	while (dirs[i++])
+	i = 0;
+	while (dirs[i])
 	{
 		part = ft_strjoin(dirs[i], "/");
 		full = NULL;
@@ -29,6 +29,7 @@ static char	*search_directories(char **dirs, char *name, int *oom)
 		if (access(full, F_OK) == 0)
 			return (full);
 		free(full);
+		i++;
 	}
 	return (NULL);
 }

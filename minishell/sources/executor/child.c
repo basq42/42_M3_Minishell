@@ -46,9 +46,12 @@ void	exec_external(t_shell *sh, char **argv)
 }
 
 /*
- * Every forked pipeline child: connects pipe ends to stdin and stdout,
- * applies the command's redirections (which override the pipe),
- * then runs a bultin or an external command.
+ * Every forked pipeline child:
+ * 			1. connects pipe ends to stdin and stdout,
+ * 			2. applies the command's redirections (which OVERRIDE the pipe),
+ * 			3. then runs a bultin or an external command.
+ * A FAILED redir exits 1. A command with only redirs: ("> f") has
+ * argv[0] == NULL and exits 0 after the files are opened.
  * No return. Called by: spawn_one, right after fork() call.
  */
 void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
@@ -66,7 +69,11 @@ void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
 	}
 	if (p->fd[0] != -1)
 		close(p->fd[0]);
-	if (apply_redirections(cmd->argv[0]))
+	if (apply_redirs(cmd->redirs) != 0)
+		shell_exit(sh, 1);
+	if (cmd->argv == NULL || cmd->argv[0] == NULL)
+		shell_exit(sh, 0);
+	if (is_builtin(cmd->argv[0]))
 		shell_exit(sh, run_builtin(sh, cmd->argv));
 	exec_external(sh, cmd->argv);
 }
@@ -74,7 +81,7 @@ void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
 /*	PSEUDO CODE FOR EXTERNAL FUNCTIONS CALLED HERE
  *	apply_redirs(r)           -> redirect.c   open each redir in order,
 		dup2 onto 0/1, close; 0 ok, 1 fail
-is_builtin(name)         
+is_builtin(name)
 	-> teammate     1 for echo cd pwd export unset env exit
 run_builtin(sh, argv)     -> teammate     runs it, returns status
 set_signals_default()     -> teammate     SIGINT/SIGQUIT back to SIG_DFL
