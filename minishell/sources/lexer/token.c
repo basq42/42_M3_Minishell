@@ -44,13 +44,13 @@ void	token_add_back(t_token **list, t_token *token)
 	last = *list;
 	while (last->next != NULL)
 		last->next = next;
-	last->next = *token;
+	last->next = token;
 }
 
 /*
  * Lexer is designed to store operators without their text (a > becomes a token
- * of type T_OUT). Yet, on syntax error, the err message needs to print the 
- * bad token for the user. 
+ * of type T_OUT). Yet, on syntax error, the err message needs to print the
+ * bad token for the user.
  * When syntax_check() find bad/unexpected token, it only has
  * next->type == T_PIPE with
  * value == NULL. So this function provides the text of the operator type.
