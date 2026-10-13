@@ -87,7 +87,10 @@ static int	read_word(char *line, int *i, t_token **tokens)
 		print_error("syntax error: unclosed quote", NULL, NULL);
 		return (2);
 	}
-	value = token_new(T_WORD, value);
+	value = ft_substr(line, start, *i - start);
+	if (!value)
+		return (1);
+	token = token_new(T_WORD, value);
 	if (!token)
 	{
 		free(value);
@@ -129,6 +132,8 @@ int	lexer(char *line, t_token **tokens)
 			i += 1;
 		else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
 			status = read_operator(line, &i, tokens);
+		else
+			status = read_word(line, &i, tokens);
 		if (status != 0)
 		{
 			free_tokens(*tokens);
