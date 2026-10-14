@@ -56,7 +56,7 @@ void	token_add_back(t_token **list, t_token *token)
  * value == NULL. So this function provides the text of the operator type.
  * return("") is a safe default for type == T_WORD, safe as syntax_check() never
  * calls token_text() on a type WORD
- * Called by: syntax_check()
+ * Called by: syntax_error()
  * */
 const char	*token_text(t_type type)
 {

@@ -56,7 +56,7 @@ void	cmd_add_back(t_cmd **list, t_cmd *cmd)
  * 		4. Free old array
  * word is copied as the token list is freed right after parsing.
  * Returns: 0 on ok, 1 on oom with cmd->argv left unchanged.
- * Caller: parse_command
+ * Caller: build_cmds()
  * */
 int	argv_append(t_cmd *cmd, char *word)
 {
@@ -118,7 +118,7 @@ static t_redir	*redir_new(t_type type, char *file)
  * 		=> redirs have to be applied in the order they were inputted:
  * 		Ex: "echo x > a > b" must first create 'a' then write into 'b'
  * Returns: 0 on ok, 1 on oom.
- * Caller: parse_redirection()
+ * Caller: build_cmds()
  * */
 int	redir_append(t_cmd *cmd, t_type type, char *file)
 {
