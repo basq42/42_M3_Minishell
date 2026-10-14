@@ -27,11 +27,11 @@ int	syntax_error(t_token *token)
 	char		*msg;
 
 	text = "newline";
-	if (!token)
+	if (token)
 		text = token_text(token->type);
 	start = ft_strjoin("syntax error near unexpected token `", text);
 	msg = NULL;
-	if (!start)
+	if (start)
 		msg = ft_strjoin(start, "'");
 	free(start);
 	if (!msg)

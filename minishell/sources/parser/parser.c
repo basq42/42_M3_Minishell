@@ -63,6 +63,7 @@ static int	build_cmds(t_token *tokens, t_cmd **cmds)
 			status = redir_append(cmd, cursor->type, cursor->next->value);
 			cursor = cursor->next;
 		}
+		cursor = cursor->next;
 	}
 	return (status);
 }
