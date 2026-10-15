@@ -11,12 +11,20 @@
  * Why this architecture?: As the shell keeps running after the bultin command's
  * process finish, so without saving and reverting the stdin and stdout, after
  * a case like: "pwd > f" every later prompt and output would go into f.
+ *
+
+	* DEPENDABLE ON IMPLEMENTATION OF RUN_BUILTIN_FUNC() specifically the exit builtin:
+ * 		- if it calls shell_exit then RUN_BUILTIN_FUNC() wont return here and
+ * 		the 2 saved fds stay open and the kernel then closes them at exit.
+ * 		- if it will return a status and let main end the shell then STEP 4 runs
+ * 		normally and saved fds are closed here.
+ *
  * !!! the builtin: exit wont return here and the saved fds stay open but kernel
  * closes them when process ends.
  * Returns: builtin command's exit status if ok, 1 on dup or redirection fail.
  * Caller: execute()
  * */
-int	run_builtin_parent(t_shell *sh, t_cmd *cmd)
+static int	run_builtin_parent(t_shell *sh, t_cmd *cmd)
 {
 	int	saved_in;
 	int	saved_out;
@@ -32,7 +40,7 @@ int	run_builtin_parent(t_shell *sh, t_cmd *cmd)
 		return (1);
 	}
 	if (apply_redirs(cmd->redirs) == 0)
-		status = run_builtin(sh, cmd->argv);
+		status = PLACE_HOLDER_RUN_BUILTIN_FUNC(sh, cmd->argv);
 	else
 		status = 1;
 	dup2(saved_in, STDIN_FILENO);
@@ -65,7 +73,7 @@ int	execute(t_shell *sh)
 	if (cmd == NULL)
 		return (0);
 	if (cmd->next == NULL && cmd->argv != NULL && cmd->argv[0] != NULL
-		&& is_builtin(cmd->argv[0]))
+		&& PLACE_HOLDER_IS_BUILTIN_FUNC(cmd->argv[0]))
 		return (run_builtin_parent(sh, cmd));
 	return (run_pipeline(sh));
 }

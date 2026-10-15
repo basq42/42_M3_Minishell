@@ -17,7 +17,7 @@ void	close_if_open(int fd)
  * Returns: 0 on ok, 1 on either pipe() or fork() fail.
  * Called by: run_pipeline, and once per command.
  * */
-int	spawn_one(t_shell *sh, t_cmd *cmd, t_pipe *p)
+static int	spawn_one(t_shell *sh, t_cmd *cmd, t_pipe *p)
 {
 	pid_t	pid;
 
@@ -47,6 +47,12 @@ int	spawn_one(t_shell *sh, t_cmd *cmd, t_pipe *p)
 
 /*
  * Runs every command of: sh->cmds in its own child, connected by pipes.
+
+	* The Parent ignores ctrl-C while it waits (PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC)
+ * 		- if it sets SIGINT and SIGQUIT to SIG_IN: ctrl-c during a command will
+ * 		only kill the children, the shell reports 130 and survives.
+ * 		- if it leaves the prompt handler in place: a ctrl-c would also run that
+ * 		handler in the shell, redrawing the prompt mid-command.
  * Returns: exit status of last command, which becomes $?
  * Called by: execute
  * */
@@ -57,7 +63,8 @@ int	run_pipeline(t_shell *sh)
 
 	p.prev_read = -1;
 	p.last_pid = -1;
-	set_signals_ignore(); // for the parent to ignore ctrl-c while waiting.
+	PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC();
+	// for the parent to ignore ctrl-c while waiting.
 	cmd = sh->cmds;
 	while (cmd)
 	{

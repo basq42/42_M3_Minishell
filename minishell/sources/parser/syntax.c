@@ -20,7 +20,7 @@ If malloc fails -> message is shorter but status is kept at 2.
 Returns: always 2
 Caller: check_syntax()
 */
-int	syntax_error(t_token *token)
+static int	syntax_error(t_token *token)
 {
 	const char	*text;
 	char		*start;

@@ -11,7 +11,7 @@
  * 	Returns: the new fd on ok, -1 on fail with errno set by open()
  * 	Caller: apply_redirs()
  * */
-int	open_redir(t_redir *redir)
+static int	open_redir(t_redir *redir)
 {
 	if (redir->type == T_IN)
 		return (open(redir->file, O_RDONLY));

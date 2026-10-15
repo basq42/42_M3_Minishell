@@ -63,54 +63,105 @@ typedef struct s_pipe
 	int				fd[2];
 	pid_t			last_pid;
 }	t_pipe;
+/* shell/shell_init.c */
+int			shell_init(t_shell *sh, char **envp);
 
-/*	utils/error.c	*/
-void		print_error(const char *first, const char *second, const char *third);
-/*	utils/free.c	*/
+/* shell/run_line.c */
+void		run_line(t_shell *sh, char *line);
+
+/* shell/shell_exit.c */
+void		shell_exit(t_shell *sh, int status);
+
+/* utils/error.c */
+void		print_error(const char *first, const char *second,
+				const char *third);
+
+/* utils/free.c */
 void		free_strarr(char **arr);
-void		free_toens(ttoken *token);
-void		free_redirs(t_redir *redir);
+void		free_tokens(t_token *token);
 void		free_cmds(t_cmd *cmd);
-/*	utils/str_utils.c	*/
-int			is_space(char c); //is also in libft
+
+/* utils/str_utils.c */
+int			is_space(char c);
 int			is_meta(char c);
-/*	lexer/lexer.c	*/
+
+/* env/env_init.c */
+t_env		*env_init(char **envp);
+t_env		*env_new(char *key, char *value);
+void		env_add_back(t_env **list, t_env *node);
+void		env_free(t_env *list);
+
+/* env/env_access.c */
+char		*env_get(t_env *env, char *key);
+int			env_set(t_env **env, char *key, char *value);
+void		env_unset(t_env **env, char *key);
+
+/* env/env_array.c */
+char		**env_to_array(t_env *env);
+
+/* lexer/lexer.c */
 int			lexer(char *line, t_token **tokens);
-/*	lexer/token.c	*/
+
+/* lexer/token.c */
 t_token		*token_new(t_type type, char *value);
 void		token_add_back(t_token **list, t_token *token);
 const char	*token_text(t_type type);
-/*	parser/parser.c	*/
+
+/* parser/parser.c */
 int			parser(t_token *tokens, t_cmd **cmds);
-/*	parser/syntax.c	*/
-int			syntax_error(t_token *token);
+
+/* parser/syntax.c */
 int			check_syntax(t_token *tokens);
-/*	parser/cmd.c	*/
+
+/* parser/cmd.c */
 t_cmd		*cmd_new(void);
 void		cmd_add_back(t_cmd **list, t_cmd *cmd);
 int			argv_append(t_cmd *cmd, char *word);
 int			redir_append(t_cmd *cmd, t_type type, char *file);
-/*	executor/execute.c	*/
+
+/* heredoc/heredoc.c */
+int			heredoc_collect(t_shell *sh);
+
+/* heredoc/heredoc_child.c */
+void		hd_child(t_shell *sh, t_redir *r);
+
+/* heredoc/heredoc_cleanup.c */
+void		heredoc_cleanup(t_cmd *cmds);
+
+/* executor/execute.c */
 int			execute(t_shell *sh);
-int			run_builtin_parent(t_shell *sh, t_cmd *cmd);
-/*	executor/pipeline.c	*/
+
+/* executor/pipeline.c */
 void		close_if_open(int fd);
-int			spawn_one(t_shell *sh, t_cmd *cmd, t_pipe *p);
 int			run_pipeline(t_shell *sh);
-/*	executor/wait.c	*/
+
+/* executor/wait.c */
 int			wait_children(pid_t last_pid, int failed);
-/*	executor/child.c	*/
+
+/* executor/child.c */
 void		exec_fail(t_shell *sh, char *a, char *b, int status);
-void		exec_external(t_shell *sh, char **argv);
 void		child_process(t_shell *sh, t_cmd *cmd, t_pipe *p);
-/*	execuutor/path.c	*/
+
+/* executor/path.c */
 char		*find_in_path(t_shell *sh, char *name);
 int			check_exec_path(char *name, char *path);
-/*	executor/redirect.c	*/
+
+/* executor/redirect.c */
 int			apply_redirs(t_redir *redir);
-int			open_redirs(t_redir *redir);
-/*	env	*/
-/*	shell	*/
-/*	heredoc	*/
+
+/* expander/ (Bahktiyor) */
+int			PLACE_HOLDER_EXPAND_CMDS_FUNC(t_shell *sh);
+char		*PLACE_HOLDER_EXPAND_STR_FUNC(t_shell *sh, char *s);
+char		*PLACE_HOLDER_REMOVE_QUOTES_FUNC(char *s);
+
+/* builtins/ (Bahktiyor) */
+int			PLACE_HOLDER_IS_BUILTIN_FUNC(char *name);
+int			PLACE_HOLDER_RUN_BUILTIN_FUNC(t_shell *sh, char **argv);
+
+/* signals/ (Bahktiyor) */
+void		PLACE_HOLDER_SET_SIGNALS_PROMPT_FUNC(void);
+void		PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC(void);
+void		PLACE_HOLDER_SET_SIGNALS_DEFAULT_FUNC(void);
+void		PLACE_HOLDER_SET_SIGNALS_HEREDOC_FUNC(void);
 
 #endif

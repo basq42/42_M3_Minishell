@@ -4,40 +4,40 @@ minishell/
 ├── Makefile
 ├── README.md
 ├── includes/
-│   └── minishell.h            every include, the global, enums, structs, all prototypes
-├── libft/                     your libft, with its own Makefile
+│   └── minishell.h
+├── libft/                     one of our libft, with its own Makefile
 └── sources/
     ├── main.c                 <b>[bahtiyor]</b> prompt loop
     ├── shell/                 <b>[baran]</b>
-    │   ├── shell_init.c       shell_init <i>[ND]</i>
-    │   ├── run_line.c         run_line, report_stage_error <i>[ND]</i>
-    │   └── shell_exit.c       shell_exit <i>[ND]</i>
+    │   ├── shell_init.c       shell_init <i>[D]</i>
+    │   ├── run_line.c         run_line, report_stage_error <i>[D]</i>
+    │   └── shell_exit.c       shell_exit <i>[D]</i>
     ├── utils/                 <b>[baran]</b>
     │   ├── error.c            print_error <i>[D]</i>
     │   ├── free.c             free_strarr, free_tokens, free_redirs, free_cmds <i>[D]</i>
     │   └── str_utils.c        is_space, is_meta <i>[D]</i>
     ├── env/                   <b>[baran]</b>
-    │   ├── env_init.c         env_init, env_new, env_add_back, env_free <i>[ND]</i>
-    │   ├── env_access.c       env_get, env_set, env_unset <i>[ND]</i>
-    │   └── env_array.c        env_to_array, env_count <i>[ND]</i>
-    ├── lexer/                 <b>[baran + bahtiyor]</b>
-    │   ├── lexer.c            lexer, read_operator, read_word <i>[D]</i>
+    │   ├── env_init.c         env_init, env_new, env_add_back, env_free <i>[D]</i>
+    │   ├── env_access.c       env_get, env_set, env_unset <i>[D]</i>
+    │   └── env_array.c        env_to_array, env_count <i>[D]</i>
+    ├── lexer/                 <b>[baran]</b>
+    │   ├── lexer.c            lexer, read_word, scan_word, read_operator, get_operator_type <i>[D]</i>
     │   └── token.c            token_new, token_add_back, token_text <i>[D]</i>
-    ├── parser/                <b>[baran + bahtiyor]</b>
-    │   ├── parser.c           parser, parse_command <i>[ND]</i>
-    │   ├── syntax.c           syntax_check, syntax_error <i>[ND]</i>
-    │   └── cmd.c              cmd_new, cmd_add_back, argv_append, redir_append <i>[ND]</i>
+    ├── parser/                <b>[baran]</b>
+    │   ├── parser.c           build_cmds, add_command, parser <i>[D]</i>
+    │   ├── syntax.c           check_syntax, syntax_error <i>[D]</i>
+    │   └── cmd.c              cmd_new, cmd_add_back, argv_append, redir_new, redir_append <i>[D]</i>
     ├── heredoc/               <b>[baran]</b>
-    │   ├── heredoc.c          heredoc_collect, heredoc_one, hd_make_path <i>[ND]</i>
-    │   ├── heredoc_child.c    hd_child, hd_read_loop <i>[ND]</i>
-    │   └── heredoc_cleanup.c  heredoc_cleanup <i>[ND]</i>
+    │   ├── heredoc.c          heredoc_collect, heredoc_one, hd_wait, hd_make_path <i>[D]</i>
+    │   ├── heredoc_child.c    hd_child, hd_read_loop, hd_eof_warning <i>[D]</i>
+    │   └── heredoc_cleanup.c  heredoc_cleanup <i>[D]</i>
     ├── executor/              <b>[baran]</b>
-    │   ├── execute.c          execute, run_builtin_parent <i>[ND]</i>
+    │   ├── execute.c          execute, run_builtin_parent <i>[D]</i>
     │   ├── pipeline.c         run_pipeline, spawn_one <i>[D]</i>
     │   ├── child.c            child_process, exec_external <i>[D]</i>
     │   ├── wait.c             wait_children, report_signal, decode_status <i>[D]</i>
     │   ├── path.c             find_in_path, check_exec_path <i>[D]</i>
-    │   └── redirect.c         apply_redirs, open_redir <i>[ND]</i>
+    │   └── redirect.c         apply_redirs, open_redir <i>[D]</i>
     ├── expander/              <b>[bahtiyor]</b>
     ├── signals/               <b>[bahtiyor]</b>
     └── builtins/              <b>[bahtiyor]</b>
@@ -116,19 +116,31 @@ flowchart TD
 	H --> N
 	N --> B
 ```
-4. Parser
+4. Parser (two passes: validate, then build)
+```
+Pass 1  check_syntax(tokens)       one loop, each token compared with the next one
+        - the line does not start with a pipe             "| ls"
+        - a pipe is followed by a command                 "ls |", "ls | | cat"
+        - a redirection is followed by a WORD             "ls >", "ls > |"
+        first broken rule -> syntax_error -> status 2, nothing allocated
+Pass 2  build_cmds(tokens, &cmds)  one loop, input already valid, only failure is oom
+        WORD     -> argv_append(cmd, value)
+        PIPE     -> cmd = new command, linked
+        operator -> redir_append(cmd, type, next->value), skip the next token
+```
 ```mermaid
 flowchart TD
-	A["syntax_check(tokens)"] -->|"!= 0"| X["return 2"]
-	A -->|ok| B["cur = tokens"]
-	B --> C{"cur != NULL?"}
-	C -->|no| OK["return 0"]
-	C -->|yes| D["cmd = cmd_new(), cmd_add_back"]
-	D --> E["parse_command(cmd, &cur): consume until PIPE or end"]
-	E --> F{"cur is PIPE?"}
-	F -->|yes| G["cur = cur->next"]
-	F -->|no| C
-	G --> C
+	A["parser(tokens, &cmds)"] --> B["check_syntax: one loop over the tokens"]
+	B -->|"rule broken"| ERR["syntax_error: status 2, nothing allocated"]
+	B -->|valid| C["build_cmds: cmd = new command, linked"]
+	C --> D{"next token?"}
+	D -->|WORD| W["argv_append"]
+	D -->|operator| R["redir_append with the next WORD, skip it"]
+	D -->|"pipe token"| P["cmd = new command, linked"]
+	D -->|"end of line"| OK["return 0"]
+	W --> D
+	R --> D
+	P --> D
 ```
 5. Executor
 ```mermaid

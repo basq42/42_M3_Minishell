@@ -16,7 +16,7 @@ void	exec_fail(t_shell *sh, char *a, char *b, int status)
  * Never returns: exits 127/126/1 with a bash style failure message.
  * CHILD ONLY. Called by: child_process.
  * */
-void	exec_external(t_shell *sh, char **argv)
+static void	exec_external(t_shell *sh, char **argv)
 {
 	char	*path;
 	char	**envp;
@@ -52,11 +52,24 @@ void	exec_external(t_shell *sh, char **argv)
  * 			3. then runs a bultin or an external command.
  * A FAILED redir exits 1. A command with only redirs: ("> f") has
  * argv[0] == NULL and exits 0 after the files are opened.
+ * WHY set the signals to default as first thing before execve:
+ * 	run_pipeline made the shell ignore SIGINT/SIGQUIT before FORK and this child
+ * 	got a copy of that. What execve does with a signal:
+ * 		- ignored	-> stays IGNORED in the new program.
+ * 		- a handler	-> reset to default with handler's code scrapped.
+ * 		- default	-> stays default.
+ * 	So without the reset, ignore would pass through execve to the new program:
+ * 		"cat" would ignore ctrl-c
+ * 	BUT this way, ctrl-c kills "cat" process, and wait_children reports 130 for
+ * 	ctrl-c or 131 for ctrl-\
+ *
+ * 	SO the implementation of SET_SIGNALS_DEFAULT has to set SIGINT and SIGQUIT
+ * 	to SIG_DFL, if not then the ctrl-c wont stop child processes.
  * No return. Called by: spawn_one, right after fork() call.
  */
 void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
 {
-	set_signals_default();
+	PLACE_HOLDER_SET_SIGNALS_DEFAULT_FUNC();
 	if (p->prev_read != -1)
 	{
 		dup2(p->prev_read, STDIN_FILENO);
@@ -73,8 +86,8 @@ void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
 		shell_exit(sh, 1);
 	if (cmd->argv == NULL || cmd->argv[0] == NULL)
 		shell_exit(sh, 0);
-	if (is_builtin(cmd->argv[0]))
-		shell_exit(sh, run_builtin(sh, cmd->argv));
+	if (PLACE_HOLDER_IS_BUILTIN_FUNC(cmd->argv[0]))
+		shell_exit(sh, PLACE_HOLDER_RUN_BUILTIN_FUNC(sh, cmd->argv));
 	exec_external(sh, cmd->argv);
 }
 

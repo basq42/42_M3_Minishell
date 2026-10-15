@@ -14,13 +14,13 @@ a leak of a token, a redir or a cmd, the bug is either a missing call
 to one of these functions, or a field that was malloc'ed somewhere but
 is not freed here.
 What these functions do NOT do:
-     - They do not set the caller's pointer to NULL. A function cannot
-       change the caller's variable when it receives a copy of the
-       pointer. So after free_cmds(sh->cmds) the caller must write
-       sh->cmds = NULL itself (run_line does this). Otherwise sh->cmds
-       still points to freed memory, and freeing it again later
-       (for example in shell_exit) is a double free.
-     - free_redirs does not delete heredoc temp files (see free_redirs).
+		- They do not set the caller's pointer to NULL. A function cannot
+		change the caller's variable when it receives a copy of the
+		pointer. So after free_cmds(sh->cmds) the caller must write
+		sh->cmds = NULL itself (run_line does this). Otherwise sh->cmds
+		still points to freed memory, and freeing it again later
+		(for example in shell_exit) is a double free.
+		- free_redirs does not delete heredoc temp files (see free_redirs).
 All of them accept NULL and then do nothing, so they are safe to call
 on an empty list.
 */
@@ -41,10 +41,10 @@ void	free_strarr(char **arr)
 }
 
 /*
- * After free(token), reading token->next is reading freed memory. So the 
+ * After free(token), reading token->next is reading freed memory. So the
  * address of the next token is copied into next_token first, then the current
  * token is freed, then we move on to the saved address.
-*/
+ */
 void	free_tokens(t_token *token)
 {
 	t_token	*next_token;
@@ -70,7 +70,7 @@ void	free_tokens(t_token *token)
  * exits, another child of the same pipeline that has not opened its
  * heredoc yet would find the file missing.
  * */
-void	free_redirs(t_redir *redir)
+static void	free_redirs(t_redir *redir)
 {
 	t_redir	*next_redir;
 
