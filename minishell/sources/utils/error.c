@@ -27,7 +27,7 @@
  *			returns: "minishell: cd"
  * part can be a string literal or result of strerror()
  * */
-static char	*join_part(const char *message, const char *part)
+static char	*join_part(char *message, const char *part)
 {
 	char	*message_with_colon;
 	char	*new_message;
