@@ -103,17 +103,17 @@ static void	run_cmds(t_shell *sh)
  * */
 void	run_line(t_shell *sh, char *line)
 {
-	t_tokens	*tokens;
-	int			status;
+	t_token	*tokens;
+	int		status;
 
 	tokens = NULL;
 	status = lexer(line, &tokens);
-	if (status == 0 && !tokens)
+	if (status == 0 && tokens)
 	{
 		status = parser(tokens, &sh->cmds);
 		free_tokens(tokens);
 	}
-	if (!status)
+	if (status != 0)
 	{
 		report_stage_error(sh, status);
 		return ;

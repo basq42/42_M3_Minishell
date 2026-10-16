@@ -21,7 +21,7 @@ int	shell_init(t_shell *sh, char **envp)
 {
 	sh->cmds = NULL;
 	sh->last_status = 0;
-	sh->env = PLACE_HOLDER_ENV_INIT(envp);
+	sh->env = env_init(envp);
 	if (sh->env == NULL && envp != NULL && envp[0] != NULL)
 		return (1);
 	return (0);

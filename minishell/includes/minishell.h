@@ -50,6 +50,13 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+typedef struct	s_env
+{
+	char			*key;
+	char			*value;
+	struct t_env	*next;
+}	t_env;
+
 typedef struct s_shell
 {
 	t_env			*env;
@@ -63,6 +70,7 @@ typedef struct s_pipe
 	int				fd[2];
 	pid_t			last_pid;
 }	t_pipe;
+
 /* shell/shell_init.c */
 int			shell_init(t_shell *sh, char **envp);
 
@@ -151,7 +159,7 @@ int			apply_redirs(t_redir *redir);
 
 /* expander/ (Bahktiyor) */
 int			PLACE_HOLDER_EXPAND_CMDS_FUNC(t_shell *sh);
-char		*PLACE_HOLDER_EXPAND_STR_FUNC(t_shell *sh, char *s);
+char		*PLACE_HOLDER_EXPAND_STRING_FUNC(t_shell *sh, char *s);
 char		*PLACE_HOLDER_REMOVE_QUOTES_FUNC(char *s);
 
 /* builtins/ (Bahktiyor) */

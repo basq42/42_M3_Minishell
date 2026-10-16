@@ -66,7 +66,7 @@ static char	*make_entry(t_env *node)
  * 	Caller: exec_external()
  * 	MALLOC HERE!!!!
  * */
-char	*env_to_array(t_env *env)
+char	**env_to_array(t_env *env)
 {
 	char	**array;
 	int		i;

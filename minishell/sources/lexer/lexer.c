@@ -42,7 +42,7 @@ static int	read_operator(char *line, int *i, t_token **tokens)
 	if (token == NULL)
 		return (1);
 	token_add_back(tokens, token);
-	if (type == T_HEREDOC || type == t_APPEND)
+	if (type == T_HEREDOC || type == T_APPEND)
 		*i = *i + 2;
 	else
 		*i = *i + 1;
@@ -62,12 +62,13 @@ static char	scan_word(char *line, int *i)
 	quote = 0;
 	while (line[*i] && (quote || !is_meta(line[*i])))
 	{
-		if (!quote && (line[*i] == '\' || line[*i] == '"'))
+		if (!quote && (line[*i] == '\'' || line[*i] == '"'))
 			quote = line[*i];
 		else if (line[*i] == quote)
 			quote = 0;
 		(*i)++;
 	}
+	return (quote);
 }
 
 /*

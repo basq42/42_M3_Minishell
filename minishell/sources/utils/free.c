@@ -1,4 +1,4 @@
-#include "minishell.c"
+#include "minishell.h"
 
 /*
 free_strarr(arr):         if arr: free each arr[i] until NULL, then free(arr)

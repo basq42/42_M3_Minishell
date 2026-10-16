@@ -73,7 +73,7 @@ int	run_pipeline(t_shell *sh)
 		cmd = cmd->next;
 	}
 	close_if_open(p.prev_read);
-	return (wait_childer(p.last_pid, cmd != NULL));
+	return (wait_children(p.last_pid, cmd != NULL));
 }
 
 /* PSEUDOCODE: caller of this file (executor/execute.c)

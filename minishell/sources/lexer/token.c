@@ -43,7 +43,7 @@ void	token_add_back(t_token **list, t_token *token)
 	}
 	last = *list;
 	while (last->next != NULL)
-		last->next = next;
+		last = last->next;
 	last->next = token;
 }
 

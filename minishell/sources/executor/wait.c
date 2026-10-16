@@ -22,7 +22,7 @@ static int	decode_status(int ws)
  * */
 static void	report_signal(int ws)
 {
-	if (!WIFSIGNALED(wd))
+	if (!WIFSIGNALED(ws))
 		return ;
 	if (WTERMSIG(ws) == SIGINT)
 		write(STDOUT_FILENO, "\n", 1);
