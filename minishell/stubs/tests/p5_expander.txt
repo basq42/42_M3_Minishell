@@ -1,0 +1,2 @@
+echo "$HOME" '$HOME' $NOPE x > "/tmp/$USER.txt"
+exit

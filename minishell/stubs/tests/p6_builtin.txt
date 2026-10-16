@@ -1,0 +1,2 @@
+pwd > /tmp/ms_out
+exit

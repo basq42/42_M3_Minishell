@@ -1,0 +1,4 @@
+cat << 'E"O"F'
+$HOME stays literal
+E"O"F
+exit

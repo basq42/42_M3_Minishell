@@ -1,0 +1,2 @@
+echo "a | b"'c' >> /tmp/ms_out</tmp/ms_in
+exit
