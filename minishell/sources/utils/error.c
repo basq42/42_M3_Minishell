@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:27:54 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:28:22 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*	ALL error messages go through print_error()
@@ -13,10 +25,10 @@
  *			-> "minishell: out.txt: Permission denied"
  *
 
-	* Approach: The whole message is first built then printed with one write() Because:
- *		In a pipeline several child processes run in paralel, and all write to
+* Approach: whole message is first built then printed with one write() Because:
+ *	In a pipeline several child processes run in paralel, and all write to
 
-			*		fd 2. If each part is printed seperatly with several write() then parts of
+ *	fd 2. If each part is printed seperatly with several write() then parts of
  *		message can interleave and leave us at the mercy of the CPU:
  *			"minishell: minishell: a: b: command not found\ncommand not found"
  * */
@@ -99,7 +111,8 @@ static void	write_parts(const char *first, const char *second,
  *	2. If build_message() fails,
 		try printing pieces with write_parts() and stop;
 
-		*	3. Otherwise write the whole line to stderr with one write() call and free it.
+*	3. Otherwise write the whole line to stderr with one write()
+*	call and free it.
  *
  *	Does not free anything else (callers should handle)
  *	Does not set exit status (Callers should decide)

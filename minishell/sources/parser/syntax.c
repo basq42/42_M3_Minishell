@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:26:14 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:26:16 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -14,7 +26,8 @@ MALLOC (in ft_strjoin)!!!
 	"ls > >"        -> minishell: syntax error near unexpected token `>'
 Dont MIX: '' with ``
 
-token_text() gives the text for operator errors as operator tokens have value == NULL
+token_text() gives the text for operator errors as operator tokens
+have value == NULL
 As a WORD is never unexpected -> only operators reach this function!
 If malloc fails -> message is shorter but status is kept at 2.
 Returns: always 2
@@ -44,7 +57,8 @@ static int	syntax_error(t_token *token)
 
 /*
 
-	* PASS 1 of the parser (validate then parse): checks if the token list is a valid line: local grammer
+* PASS 1 of the parser (validate then parse): checks if the token list
+* is a valid line: local grammer
  * The check depends on 3 RULES:
  * 		1. THE FIRST TOKEN: is it an token allowed to start a line?
  * 		2. THE LAST TOKEN: is it a token allowed to end a line?

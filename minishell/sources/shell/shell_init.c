@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell_init.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:26:40 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:26:55 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -16,11 +28,21 @@
  * 		return 1 before the prompt loop.
  * 		- if you chose to ignore in main: the shell would start with an empty or
  * 		partial environment silently!
+ *
+ * 	23.10.2026 FIX: running exit as lone command was terminating the shell
+ * 	without closing fds. This was due to the fds being treated as local
+ * 	variables in run_builtin_parent, which call dup twice to save copies of
+ * 	stdin and stdout and waits for builtin to return. Restore and close calls
+ * 	come after the waiting, so if waiting dont return it never executes.
+ * 	FIX => save the shared FDs in the t_shell struct, set it to a non-default fd
+ * 	value like -1, and make shell_exit call clean all that are != -1;
  * */
 int	shell_init(t_shell *sh, char **envp)
 {
 	sh->cmds = NULL;
 	sh->last_status = 0;
+	sh->saved_in = -1;
+	sh->saved_out = -1;
 	sh->env = env_init(envp);
 	if (sh->env == NULL && envp != NULL && envp[0] != NULL)
 		return (1);

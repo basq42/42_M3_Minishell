@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_child.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:24:05 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:24:07 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*	MALLOC HERE
  * ctrl-d on a empty "> " prompt ends the heredoc early, and what was typed so
  * far is accepted but only prints warning (as per bash).
 
-			* 		minishell: warning: here-document delimited by end-of-file (wanted `EOF')
+*  minishell: warning: here-document delimited by end-of-file (wanted `EOF')
  * message is built with 2 ft_strjoin calls. if one fails, a shorter message is
  * printed but the heredoc still succeeds.
  * Returns: always 0

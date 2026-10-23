@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:21:44 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:22:37 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -65,7 +77,7 @@ char	*find_in_path(t_shell *sh, char *name)
 
 /*
 
-	* Checks whether the PATH can be executed. If can't then prints the bash message.
+*Checks whether the PATH can be executed. If can't then prints the bash message.
  * Returns: 0 on ok, 127 on missing, 126 on directory or no exec permission.
  * Called by: exec_external;
  * int stat(const char *path, struct stat *buf);

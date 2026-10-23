@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_init.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:18:31 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:19:26 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*	THE SHELL's ENVIRONMENT
@@ -22,7 +34,7 @@
  * 	format.
  *
 
-		* 	value == NULL means "declared without a value" (such as in case of "export X").
+ * 	value = NULL means "declared without a value"(such as in case of "export X")
  * 	This variable exists for EXPORT but env DOES NOT PRINT it and it is NOT
  * 	PASSED TO PROGRAMS as per bash (refer to env_to_array).
  * */

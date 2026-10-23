@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell_exit.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:26:53 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:26:55 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -20,9 +32,14 @@
  * 		- If the exit builtin calls shell_exit: same, with exit's status.
  * 		- If either calls exit() directly instead: env and cmds WONT BE FREED
  * 		HENCE CAUSING LEAKS!
+ *
+ * 23.10.2026: FIX: now shell_exit closes the saved stdin/stdout copies of
+ * run_builtin_parent, if a builtin is running (exit).
  * */
 void	shell_exit(t_shell *sh, int status)
 {
+	close_if_open(sh->saved_in);
+	close_if_open(sh->saved_out);
 	env_free(sh->env);
 	free_cmds(sh->cmds);
 	rl_clear_history();

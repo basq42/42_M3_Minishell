@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:17:45 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:17:47 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -35,7 +47,7 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef	struct	s_redir
+typedef struct s_redir
 {
 	t_type			type;
 	char			*file;
@@ -50,7 +62,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	char			*key;
 	char			*value;
@@ -62,6 +74,8 @@ typedef struct s_shell
 	t_env			*env;
 	t_cmd			*cmds;
 	int				last_status;
+	int				saved_in;
+	int				saved_out;
 }	t_shell;
 
 typedef struct s_pipe

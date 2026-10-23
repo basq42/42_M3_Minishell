@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipeline.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:20:18 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:23:11 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -48,7 +60,7 @@ static int	spawn_one(t_shell *sh, t_cmd *cmd, t_pipe *p)
 /*
  * Runs every command of: sh->cmds in its own child, connected by pipes.
 
-	* The Parent ignores ctrl-C while it waits (PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC)
+* Parent ignores ctrl-C while it waits(PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC)
  * 		- if it sets SIGINT and SIGQUIT to SIG_IN: ctrl-c during a command will
  * 		only kill the children, the shell reports 130 and survives.
  * 		- if it leaves the prompt handler in place: a ctrl-c would also run that

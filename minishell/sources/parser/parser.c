@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:25:39 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:26:17 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*	MECHANISM (2 passes): VALIDATE (syntax_check) -> BUILD (here)
@@ -8,7 +20,7 @@
  *					cmd1: argv [cat],		redirs: [< input]
  *					cmd2: argv [wc, -l], redirs: none
 
-		*	Only possible error path is Out of Memory (oom) as parser assumes valid input.
+*Only possible error path is Out of Memory (oom) as parser assumes valid input.
  *	This way, syntax error cannot be happen after an allocation, hence simpler.
  * */
 /*

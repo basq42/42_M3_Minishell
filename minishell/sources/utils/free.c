@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/23 11:28:12 by bkelav            #+#    #+#             */
+/*   Updated: 2026/10/23 11:28:23 by bkelav           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -116,7 +128,8 @@ void	free_cmds(t_cmd *cmd)
 			free(token->vlaue);
 			token = next;
 
-# Frees the redirection list. Also frees hd_path string but without unlinking file
+# Frees the redirection list. Also frees
+hd_path string but without unlinking file
 # Called by free_cmds;
 	free_redirs(r);
 		while (r);
