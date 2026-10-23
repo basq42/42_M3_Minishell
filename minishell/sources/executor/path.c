@@ -6,15 +6,49 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:21:44 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:22:37 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/23 12:34:43 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
+ * ISSUE: minishell$> . | .. | .
+ * 			minishell$> .: Is a directory
+ * 			minishell$> ..: Is a directory
+ *  While Bash does:
+ *  		~$ . | .. | .
+			bash: .: filename argument required
+				.: usage: . filename [arguments]
+			bash: .: filename argument required
+				.: usage: . filename [arguments]
+				..: command not found
+	FIX: check whether file or path
+ find_in_path takes command name (a WORD without /, like ls) and PATH variable
+ and then splits PATH into directories. For each dir, search_directories builds
+ candidate path and checks if it exists and returns first existing candidate as
+ the command to run, something like:
+ name = "ls"      dirs = /home/$USER/bin, /usr/local/bin, /usr/bin, ...
+candidate 1: /home/$USER/bin/ls     access(F_OK) fails   -> next
+candidate 2: /usr/local/bin/ls     access(F_OK) fails   -> next
+candidate 3: /usr/bin/ls           access(F_OK) works   -> returns it
+SO FIX: instead of checking if it exists, now checks if it is a regular file
+via using the system-def. file and directory metedata struct. Then stat()
+requests kernel to fill for path. S_ISREG = tru for file and =false for rest
+ * */
+static int	is_regular_file(char *path)
+{
+	struct stat	st;
+
+	return (stat(path, &st) == 0 && S_ISREG(st.st_mode));
+}
+
+/* OLD:
  * Tries "dir/name" for each directory in directories, picks the first existing
  * file.
+ * ----------------------------
+ * NEW:
+ * Picks the first regular file.
  * Returns: mallocd full path or NULL if not found.
  * If malloc failure then returns NULL and set *oom (out of memory) to 1.
  * Called by: find_in_path;
@@ -38,7 +72,7 @@ static char	*search_directories(char **dirs, char *name, int *oom)
 			*oom = 1;
 			return (NULL);
 		}
-		if (access(full, F_OK) == 0)
+		if (is_regular_file(full))
 			return (full);
 		free(full);
 		i++;
