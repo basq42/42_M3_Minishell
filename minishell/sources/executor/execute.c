@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:22:24 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:22:34 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/23 11:41:21 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@
  * */
 static int	run_builtin_parent(t_shell *sh, t_cmd *cmd)
 {
-	int	saved_in;
-	int	saved_out;
 	int	status;
 
 	sh->saved_in = dup(STDIN_FILENO);
