@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:21:44 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 12:34:43 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/23 17:18:31 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	check_exec_path(char *name, char *path)
 {
 	struct stat	st;
 
-	if (stat(path, &st) == 1)
+	if (stat(path, &st) == -1)
 	{
 		print_error(name, "No such file or directory", NULL);
 		return (127);
