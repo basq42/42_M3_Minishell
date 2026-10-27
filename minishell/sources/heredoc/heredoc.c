@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:23:42 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/27 17:27:59 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/27 17:44:31 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*hd_make_path(int *count)
 		if (!path)
 			return (NULL);
 		(*count)++;
-		fd = open(path, O_WONLY | O_CREAT | O_EXCL, 0600);
+		fd = open(path, O_WRONLY | O_CREAT | O_EXCL, 0600);
 		if (fd != -1 || errno != EEXIST)
 		{
 			if (fd != -1)
