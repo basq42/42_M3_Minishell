@@ -62,6 +62,7 @@ int	wait_children(pid_t last_pid, int failed)
 	pid = wait(&ws);
 	while (pid != -1)
 	{
+		dbg_num("wait", "reaped pid", pid);
 		if (pid == last_pid)
 			last_ws = ws;
 		pid = wait(&ws);

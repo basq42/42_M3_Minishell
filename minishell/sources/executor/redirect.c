@@ -80,6 +80,8 @@ int	apply_redirs(t_redir *redir)
 		else
 			target = STDOUT_FILENO;
 		dup2(fd, target);
+		dbg_str("redir", "file:", redir->file);
+		dbg_num("redir", "now on fd", target);
 		close(fd);
 		redir = redir->next;
 	}

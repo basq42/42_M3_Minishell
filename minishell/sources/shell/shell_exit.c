@@ -38,6 +38,7 @@
  * */
 void	shell_exit(t_shell *sh, int status)
 {
+	dbg_num("exit", "shell_exit with status", status);
 	close_if_open(sh->saved_in);
 	close_if_open(sh->saved_out);
 	env_free(sh->env);

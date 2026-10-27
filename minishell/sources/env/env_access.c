@@ -101,6 +101,7 @@ int	env_set(t_env **env, char *key, char *value)
 	t_env	*node;
 	char	*value_copy;
 
+	dbg_str("env", "set", key);
 	node = env_find(*env, key);
 	if (node && !value)
 		return (0);

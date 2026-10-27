@@ -89,8 +89,10 @@ char	*hd_make_path(int *count)
 		{
 			if (fd != -1)
 				close(fd);
+			dbg_str("hd", "temp file:", path);
 			return (path);
 		}
+		dbg_str("hd", "name taken, trying next:", path);
 		free(path);
 	}
 }
@@ -108,6 +110,7 @@ static int	hd_wait(pid_t pid)
 	int	ws;
 
 	waitpid(pid, &ws, 0);
+	dbg_num("hd", "reader ended, raw status word", ws);
 	if (WIFSIGNALED(ws) && WTERMSIG(ws) == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
@@ -157,6 +160,7 @@ int	heredoc_one(t_shell *sh, t_redir *redir, int *count)
 	}
 	if (pid == 0)
 		hd_child(sh, redir);
+	dbg_num("hd", "reader child pid", pid);
 	return (hd_wait(pid));
 }
 

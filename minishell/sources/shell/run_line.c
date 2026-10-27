@@ -85,7 +85,10 @@ static void	run_cmds(t_shell *sh)
 		if (status != 0)
 			print_error("out of memory", NULL, NULL);
 		else
+		{
+			dbg_cmds("expanded", sh->cmds);
 			status = execute(sh);
+		}
 	}
 	sh->last_status = status;
 	heredoc_cleanup(sh->cmds);
@@ -122,14 +125,15 @@ void	run_line(t_shell *sh, char *line)
 	status = lexer(line, &tokens);
 	if (status == 0 && tokens)
 	{
+		dbg_tokens(tokens);
 		status = parser(tokens, &sh->cmds);
+		dbg_cmds("parsed", sh->cmds);
 		free_tokens(tokens);
 	}
 	if (status != 0)
-	{
 		report_stage_error(sh, status);
-		return ;
-	}
-	if (sh->cmds)
+	else if (sh->cmds)
 		run_cmds(sh);
+	dbg_num("line", "$? =", sh->last_status);
+	dbg_fds();
 }

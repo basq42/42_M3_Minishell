@@ -37,6 +37,7 @@ void	heredoc_cleanup(t_cmd *cmds)
 		{
 			if (redir->hd_path)
 			{
+				dbg_str("clean", "unlink", redir->hd_path);
 				unlink(redir->hd_path);
 				free(redir->hd_path);
 				redir->hd_path = NULL;

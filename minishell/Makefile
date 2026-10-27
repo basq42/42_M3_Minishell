@@ -25,6 +25,7 @@ LEXER		= lexer/lexer.c lexer/token.c
 PARSER		= parser/cmd.c parser/parser.c parser/syntax.c
 SHELL_SRC	= shell/run_line.c shell/shell_exit.c shell/shell_init.c
 UTILS		= utils/error.c utils/free.c utils/str_utils.c
+DEBUG_SRC	= debug/debug_print.c debug/debug_dump.c
 
 # ===== Bahktiyor ======== #
 
@@ -40,7 +41,7 @@ BUILTINS	= builtins/builtins_b.c builtins/cd.c builtins/cd_path.c \
 			  builtins/unset.c
 
 SRCS		= $(MAIN) $(ENV) $(EXECUTOR) $(HEREDOC) $(LEXER) $(PARSER) \
-			  $(SHELL_SRC) $(UTILS) $(SIGNALS) $(EXPANDER) $(BUILTINS)
+			  $(SHELL_SRC) $(UTILS) $(DEBUG_SRC) $(SIGNALS) $(EXPANDER) $(BUILTINS)
 OBJS		= $(addprefix $(OBJ_DIR)/,$(SRCS:.c=.o))
 
 all: $(NAME)

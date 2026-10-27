@@ -125,6 +125,7 @@ char	*find_in_path(t_shell *sh, char *name)
 		exec_fail(sh, "out of memory", NULL, 1);
 	if (!full)
 		exec_fail(sh, name, "command not found", 127);
+	dbg_str("path", "found:", full);
 	return (full);
 }
 

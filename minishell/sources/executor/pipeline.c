@@ -81,6 +81,8 @@ int	run_pipeline(t_shell *sh)
 	{
 		if (spawn_one(sh, cmd, &p) != 0)
 			break ;
+		dbg_num("spawn", "forked child pid", p.last_pid);
+		dbg_num("spawn", "parent keeps prev_read =", p.prev_read);
 		cmd = cmd->next;
 	}
 	close_if_open(p.prev_read);

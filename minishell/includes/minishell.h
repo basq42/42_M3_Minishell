@@ -217,4 +217,17 @@ void		set_signals_ignore(void);
 void		set_signals_default(void);
 void		set_signals_heredoc(void);
 
+/* debug/ : DEBUG BRANCH ONLY, never merged into master */
+# ifndef DEBUG
+#  define DEBUG 1
+# endif
+
+void		dbg_put(const char *s);
+void		dbg(const char *tag, const char *msg);
+void		dbg_num(const char *tag, const char *msg, int n);
+void		dbg_str(const char *tag, const char *msg, const char *s);
+void		dbg_tokens(t_token *token);
+void		dbg_cmds(const char *when, t_cmd *cmd);
+void		dbg_fds(void);
+
 #endif

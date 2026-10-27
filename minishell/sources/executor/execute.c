@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:22:24 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:31:05 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 17:24:12 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,10 @@ int	execute(t_shell *sh)
 		return (0);
 	if (cmd->next == NULL && cmd->argv != NULL && cmd->argv[0] != NULL
 		&& is_builtin(cmd->argv[0]))
+	{
+		dbg_str("exec", "lone builtin, runs in the shell:", cmd->argv[0]);
 		return (run_builtin_parent(sh, cmd));
+	}
+	dbg("exec", "pipeline: one child per command");
 	return (run_pipeline(sh));
 }
