@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:23:42 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:24:07 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/27 17:27:59 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,15 @@
  * moves it past every name that was tried.
  * WHY? => the name may already be taken by either another shell running in
  * parallel or a by a file left behind on a crashed run.
+ *
+ * ADDITION: use O_EXCL to check if name is taken to prevent truncating
+ * a random file.
  * */
 char	*hd_make_path(int *count)
 {
 	char	*number;
 	char	*path;
+	int		fd;
 
 	while (1)
 	{
@@ -80,8 +84,13 @@ char	*hd_make_path(int *count)
 		if (!path)
 			return (NULL);
 		(*count)++;
-		if (access(path, F_OK) == -1)
+		fd = open(path, O_WONLY | O_CREAT | O_EXCL, 0600);
+		if (fd != -1 || errno != EEXIST)
+		{
+			if (fd != -1)
+				close(fd);
 			return (path);
+		}
 		free(path);
 	}
 }
