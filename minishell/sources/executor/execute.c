@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:22:24 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:41:21 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/27 11:36:39 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static int	run_builtin_parent(t_shell *sh, t_cmd *cmd)
 		print_error("dup", strerror(errno), NULL);
 		close_if_open(sh->saved_in);
 		close_if_open(sh->saved_out);
+		sh->saved_in = -1;
+		sh->saved_out = -1;
 		return (1);
 	}
 	if (apply_redirs(cmd->redirs) == 0)
