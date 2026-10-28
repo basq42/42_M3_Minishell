@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:23:42 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/27 17:44:31 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/28 17:28:01 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int	heredoc_one(t_shell *sh, t_redir *redir, int *count)
 		print_error("out of memory", NULL, NULL);
 		return (1);
 	}
-	PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC();
+	set_signals_ignore();
 	pid = fork();
 	if (pid == -1)
 	{

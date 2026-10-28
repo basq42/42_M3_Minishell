@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:20:18 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:23:11 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/28 17:27:15 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ int	run_pipeline(t_shell *sh)
 
 	p.prev_read = -1;
 	p.last_pid = -1;
-	PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC();
-	// for the parent to ignore ctrl-c while waiting.
+	set_signals_ignore();
 	cmd = sh->cmds;
 	while (cmd)
 	{

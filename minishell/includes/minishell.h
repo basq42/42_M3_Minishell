@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:17:45 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:17:47 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/28 17:26:35 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,10 +180,11 @@ char		*PLACE_HOLDER_REMOVE_QUOTES_FUNC(char *s);
 int			PLACE_HOLDER_IS_BUILTIN_FUNC(char *name);
 int			PLACE_HOLDER_RUN_BUILTIN_FUNC(t_shell *sh, char **argv);
 
-/* signals/ (Bahktiyor) */
-void		PLACE_HOLDER_SET_SIGNALS_PROMPT_FUNC(void);
-void		PLACE_HOLDER_SET_SIGNALS_IGNORE_FUNC(void);
-void		PLACE_HOLDER_SET_SIGNALS_DEFAULT_FUNC(void);
-void		PLACE_HOLDER_SET_SIGNALS_HEREDOC_FUNC(void);
+/* signals/signal.c */
+void		set_sig_int_quit(void (*on_sigint)(int), void (*on_sigquit)(int));
+void		set_signals_prompt(void);
+void		set_signals_ignore(void);
+void		set_signals_default(void);
+void		set_signals_heredoc(void);
 
 #endif

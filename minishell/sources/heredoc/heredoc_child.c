@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:24:05 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:24:07 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/28 17:28:35 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	hd_child(t_shell *sh, t_redir *redir)
 	int		expand;
 	int		status;
 
-	PLACE_HOLDER_SET_SIGNALS_HEREDOC_FUNC();
+	set_signals_heredoc();
 	fd = open(redir->hd_path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
 	{

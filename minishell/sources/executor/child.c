@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:20:04 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:22:33 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/28 17:27:40 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	exec_external(t_shell *sh, char **argv)
  */
 void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
 {
-	PLACE_HOLDER_SET_SIGNALS_DEFAULT_FUNC();
+	set_signals_default();
 	if (p->prev_read != -1)
 	{
 		dup2(p->prev_read, STDIN_FILENO);
