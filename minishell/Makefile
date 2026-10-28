@@ -29,7 +29,7 @@ UTILS		= utils/error.c utils/free.c utils/str_utils.c
 # ===== Bahktiyor (TO DO) ======== #
 
 MAIN		= main.c
-SIGNALS		=
+SIGNALS		= signals/signal.c signals/signal_set.c
 EXPANDER	=
 BUILTINS	=
 

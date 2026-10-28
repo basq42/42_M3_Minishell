@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/28 17:20:46 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/28 17:24:22 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/28 17:37:33 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	set_signals_ignore(void)
 	set_sig_int_quit(SIG_IGN, SIG_IGN);
 }
 
-void	set_signals_default(void);
+void	set_signals_default(void)
 {
 	set_sig_int_quit(SIG_DFL, SIG_DFL);
 }

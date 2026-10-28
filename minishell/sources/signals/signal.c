@@ -6,9 +6,11 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/28 15:49:46 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/28 17:20:26 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/28 17:39:09 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 /*
  * !! SIGNALS !!
@@ -26,7 +28,7 @@
  * 	2. COMPILER: optimeses the main routine with assuming that main has been set
  * 	to be the only function editing it's variables.
  * 		=> [volatile] informs the compiler not to optimise access to variable,
-			so
+		so
  * 		every read/write goes to the actual memory location instead of a virtual
  * 		copy left in the register, or caches. This way, variables that are
  * 		expected to be edited outside of the program's normal flow
@@ -45,9 +47,9 @@ volatile sig_atomic_t	g_signal = 0;
 /*	!! rl_* functions are NOT ASYNC-SIGNAL-SAFE!!! but no issues as the setup
  *	assures that no signal arrives while readline is not waiting for input.
  *	*/
-static void	prompt_sigint_handler(int signal)
+static void	prompt_sigint_handler(int sig)
 {
-	g_signal = signal;
+	g_signal = sig;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);

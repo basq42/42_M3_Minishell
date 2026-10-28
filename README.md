@@ -19,7 +19,7 @@ minishell/
 │   └── minishell.h
 ├── libft/                     one of our libft, with its own Makefile
 └── sources/
-    ├── main.c                 <b>[baran]</b> <i>[D]<i>
+    ├── main.c                 <b>[baran]</b> <i>[D]</i>
     ├── shell/                 <b>[baran]</b>
     │   ├── shell_init.c       shell_init <i>[D]</i>
     │   ├── run_line.c         run_line, report_stage_error <i>[D]</i>
@@ -51,7 +51,7 @@ minishell/
     │   ├── path.c             find_in_path, check_exec_path <i>[D]</i>
     │   └── redirect.c         apply_redirs, open_redir <i>[D]</i>
     ├── expander/              <b>[bahtiyor]</b>
-    ├── signals/               <b>[baran]</b> <i>[D]<i>
+    ├── signals/               <b>[baran]</b> <i>[D]</i>
     └── builtins/              <b>[bahtiyor]</b>
 </pre>
 
