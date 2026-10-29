@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:04:36 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:57:12 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 15:20:28 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,36 @@ static int	parse_status(char *arg, int *ok)
 	return (n % 256);
 }
 
+/*	ISSUE: disperancy with bash: typing exit at bash prompt, bash prints the
+ *	word exit on STDERR BEFORE it quits, unless the exit runs in a pipeline.
+ *	|Input		| bash Print		| Shell quits?	|
+ *	|-----------|-------------------|---------------|
+ *1	|	exit	|	exit			|	yes			|
+ *	|-----------|-------------------|---------------|
+ *2	|	exit 3	|	exit			|	yes			|
+ *	|-----------|-------------------|---------------|
+ *3	| exit abc	| exit then error 	|	yes			|
+ *	|-----------|-------------------|---------------|
+ *4	| exit 1 2	| exit then error	|	no			|
+ *	|-----------------------------------------------|
+ *5	|exit 5 | cat| nothing			| no (child yes)|
+ *	|-----------------------------------------------|
+ *6	|echo exit|bash| nothing		| yes			|
+ *	-------------------------------------------------
+ *	bt_exit never prints exit:
+ *	numbers 1,2,3,4 are different from bash. Statuses are correct(?)
+ *	FIX: bt_exit is called by: run_builtin_parent for a lone exit -> print
+ *				child_process: inside a pipeline 					-> no print
+ *		check with isatty(sh->saved_in) which tells (as caller sets) what is the
+ *		case.
+ * */
 int	bt_exit(t_shell *sh, char **argv)
 {
 	int	ok;
 	int	status;
 
+	if (isatty(sh->saved_in))
+		ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (!argv[1])
 		shell_exit(sh, sh->last_status);
 	status = parse_status(argv[1], &ok);
