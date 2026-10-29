@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:17:45 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 14:46:12 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 15:34:12 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ char		*remove_quotes(char *s);
 char		*expand_string(t_shell *sh, char *s);
 
 /* builtins	*/
+void		print_ident_error(char *cmd, char *arg);
 int			is_builtin(char *name);
 int			run_builtin(t_shell *sh, char **argv);
 int			bt_echo(char **argv);

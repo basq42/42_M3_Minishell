@@ -6,12 +6,15 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:04:40 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:04:50 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 15:32:52 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * on invalid KEY -> print_ident_error to get bash format with ` '
+ * */
 static int	export_one(t_shell *sh, char *arg)
 {
 	char	*eq;
@@ -27,7 +30,7 @@ static int	export_one(t_shell *sh, char *arg)
 		return (1);
 	if (!is_valid_identifier(key))
 	{
-		print_error("export", arg, "not a valid identifier");
+		print_ident_error("export", arg);
 		free(key);
 		return (1);
 	}
