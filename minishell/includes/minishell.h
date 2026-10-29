@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:17:45 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:27:09 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 11:57:32 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <limits.h>
 # include "libft.h"
 
 # define HD_PREFIX "/tmp/.minishell_hd_"
