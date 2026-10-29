@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:07:05 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:07:23 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 15:55:42 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,43 @@ static char	*lookup_var(t_shell *sh, char *raw, int *i)
 	return (ft_strdup(value));
 }
 
+/* ISSUE:
+minishell$ echo $1abc
+$1abc
+minishell$ echo $9
+$9
+minishell$ echo "$1abc"
+$1abc
+minishell$ echo $12
+$12
+minishell$
+exit
+
+While BASH Does:
+abc instead of $1abc
+empty line instead of $9
+abc instead of $1abc
+2 instead of $12
+
+Why this issue: read_var has 3 branches:
+	- $? gives the status;
+	- $ followed by a letter or _ gives a variable lookup;
+	- anything else gives a literal "$"
+FIX: - treat a digit after $ as positional-parameter name
+		- skip 2 chars to get 2 out of $12
+expand_string also calls this.
+ * */
 char	*read_var(t_shell *sh, char *raw, int *i)
 {
 	if (raw[*i + 1] == '?')
 	{
 		*i += 2;
 		return (ft_itoa(sh->last_status));
+	}
+	if (ft_isdigit(raw[*i + 1]))
+	{
+		*i += 2;
+		return (ft_strdup(""));
 	}
 	if (!ft_isalpha(raw[*i + 1]) && raw[*i + 1] != '_')
 	{
