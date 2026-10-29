@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:21:44 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 17:18:31 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 16:07:22 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,25 @@ static char	*search_directories(char **dirs, char *name, int *oom)
  * child (127 not found / PATH unset, 1 out of memory).
  * CHILD ONLY and called by exec_external.
  */
+/*	ISSUE: bash treats empty PATH entry as current directory.
+ *	bash does:
+ *	export PATH=; ls -> bash: ls: No such file or directory
+ *	minishell did:
+ *	export PATH=; ls -> minishell: ls: command not found
+ *	statuses are correct, just the message + if explicitly unset, minishell
+ *	behaviour was same as bash, so issue is just on empty PATH -> why:
+ *		on unset, env_get returns NULL so right message is printed. on empty
+ *		PATH env_get returns "", which !=NULL, so check passed ft_split("", ':')
+ *		which gives an empty array -> search_directories finds nothing and code
+ *		falls through "command not found"
+ *	FIX:
+ *		additionally to !path_var check, !*path_var,
+			which catches an empty string
+ *		with *path_var == '\0'.
+ *	NOTES: not the best fix, as bash still searches current dir for executable.
+ *	So if that exists in current dir, bash would execute while minishell will
+ *	throw an error.
+ * */
 char	*find_in_path(t_shell *sh, char *name)
 {
 	char	*path_var;
@@ -94,7 +113,7 @@ char	*find_in_path(t_shell *sh, char *name)
 	int		oom;
 
 	path_var = env_get(sh->env, "PATH");
-	if (!path_var)
+	if (!path_var || !*path_var)
 		exec_fail(sh, name, "No such file or directory", 127);
 	dirs = ft_split(path_var, ':');
 	oom = (dirs == NULL);
