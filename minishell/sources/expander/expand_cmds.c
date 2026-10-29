@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:06:58 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 14:53:14 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 15:02:09 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static int	expand_argv(t_shell *sh, t_cmd *cmd)
 	free(scratch);
 	return (0);
 }
+
 /*
  * Issue: no check for the amount of fields, bash only redirects if field count
  * is exactly 1, on 0 or 2+ it throws ambiguous error.
