@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:17:45 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:57:32 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 14:46:12 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_redir
 	t_type			type;
 	char			*file;
 	char			*hd_path;
+	int				ambiguous;
 	struct s_redir	*next;
 }	t_redir;
 

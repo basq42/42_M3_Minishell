@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:25:24 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:26:17 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 14:46:42 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,10 @@ int	argv_append(t_cmd *cmd, char *word)
  * Returns: new redirection on ok, NULLL on oom.
  * Caller: redor_append
  * */
+/*	Issue: bash checks field count: 1=use it, 0 or 2+=ambigious.
+ *	Fix: Added ambigious flag to t_redir, here start from 0 + in expand_cmds.c
+ *	check for field amount.
+ * */
 static t_redir	*redir_new(t_type type, char *file)
 {
 	t_redir	*redir;
@@ -120,6 +124,7 @@ static t_redir	*redir_new(t_type type, char *file)
 	}
 	redir->type = type;
 	redir->hd_path = NULL;
+	redir->ambiguous = 0;
 	redir->next = NULL;
 	return (redir);
 }

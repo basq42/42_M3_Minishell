@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:06:58 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:35:47 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 14:53:14 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,44 @@ static int	expand_argv(t_shell *sh, t_cmd *cmd)
 	free(scratch);
 	return (0);
 }
+/*
+ * Issue: no check for the amount of fields, bash only redirects if field count
+ * is exactly 1, on 0 or 2+ it throws ambiguous error.
+ * FIX: check field array members: only field[0] should exist.
+ * NEW: helper function and shorter expand_redirs()
+ * */
+static int	expand_one_redir(t_shell *sh, t_redir *redir)
+{
+	char	**fields;
+	char	*new_file;
+
+	fields = expand_word(sh, redir->file);
+	if (!fields)
+		return (1);
+	if (!fields[0] || fields[1])
+	{
+		redir->ambiguous = 1;
+		free_strarr(fields);
+		return (0);
+	}
+	new_file = ft_strdup(fields[0]);
+	free_strarr(fields);
+	if (!new_file)
+		return (1);
+	free(redir->file);
+	redir->file = new_file;
+	return (0);
+}
 
 static int	expand_redirs(t_shell *sh, t_cmd *cmd)
 {
 	t_redir	*redir;
-	char	**fields;
-	char	*new_file;
 
 	redir = cmd->redirs;
 	while (redir)
 	{
-		if (redir->type != T_HEREDOC)
-		{
-			fields = expand_word(sh, redir->file);
-			if (!fields)
-				return (1);
-			if (fields[0])
-				new_file = ft_strdup(fields[0]);
-			else
-				new_file = ft_strdup("");
-			free_strarr(fields);
-			if (!new_file)
-				return (1);
-			free(redir->file);
-			redir->file = new_file;
-		}
+		if (redir->type != T_HEREDOC && expand_one_redir(sh, redir))
+			return (1);
 		redir = redir->next;
 	}
 	return (0);

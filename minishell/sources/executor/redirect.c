@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:22:30 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:22:32 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 14:56:12 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,15 @@
  * 	Returns: the new fd on ok, -1 on fail with errno set by open()
  * 	Caller: apply_redirs()
  * */
+/*	NEW: field check for 'ambiguous redirect' as bash does.
+ * */
 static int	open_redir(t_redir *redir)
 {
+	if (redir->ambiguous)
+	{
+		print_error(redir->file, "ambiguous redirect", NULL);
+		return (-2);
+	}
 	if (redir->type == T_IN)
 		return (open(redir->file, O_RDONLY));
 	if (redir->type == T_OUT)
@@ -50,6 +57,9 @@ static int	open_redir(t_redir *redir)
  * 	Returns: 0 on ok, 1 on fail (error msg already printed)
  * 	Caller: child_process(), run_builtin_parent().
  * */
+/*	NEW: now open_redir() returns -2 on ambiguous redirect error:
+ *		export F="a b"; echo hi > $F
+ * */
 int	apply_redirs(t_redir *redir)
 {
 	int	fd;
@@ -58,6 +68,8 @@ int	apply_redirs(t_redir *redir)
 	while (redir != NULL)
 	{
 		fd = open_redir(redir);
+		if (fd == -2)
+			return (1);
 		if (fd == -1)
 		{
 			print_error(redir->file, strerror(errno), NULL);
