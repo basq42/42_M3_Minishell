@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:05:01 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:06:02 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 12:07:22 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,18 +89,26 @@ static int	walk_target(char ***stack, char *target, int status)
 	return (status);
 }
 
+/*
+ *	ISSUE: builds new path from $PWD, without checking if it is set:
+ *		if PWD unset (old_pwd == NULL), the stack starts empty, so "cd .." and
+ *		resolves from "/".
+ *	FIX: if no old_pwd, ask kernel for the current working dir via getcwd().
+ * */
 char	*build_new_pwd(char *old_pwd, char *target)
 {
 	char	**stack;
 	char	*result;
 	int		status;
 
+	if (!old_pwd)
+		return (getcwd(NULL, 0));
 	stack = malloc(sizeof(char *));
 	if (!stack)
 		return (NULL);
 	stack[0] = NULL;
 	status = 0;
-	if (target[0] != '/' && old_pwd)
+	if (target[0] != '/')
 		status = fill_stack(&stack, old_pwd);
 	status = walk_target(&stack, target, status);
 	if (status != 0)
