@@ -26,12 +26,18 @@ PARSER		= parser/cmd.c parser/parser.c parser/syntax.c
 SHELL_SRC	= shell/run_line.c shell/shell_exit.c shell/shell_init.c
 UTILS		= utils/error.c utils/free.c utils/str_utils.c
 
-# ===== Bahktiyor (TO DO) ======== #
+# ===== Bahktiyor ======== #
 
 MAIN		= main.c
 SIGNALS		= signals/signal.c signals/signal_set.c
-EXPANDER	=
-BUILTINS	=
+EXPANDER	= expander/expand_cmds.c expander/expand_field.c \
+			  expander/expand_strbuf.c expander/expand_var.c \
+			  expander/expand_word.c expander/quotes.c
+BUILTINS	= builtins/builtins_b.c builtins/cd.c builtins/cd_path.c \
+			  builtins/cd_stack.c builtins/echo.c builtins/env.c \
+			  builtins/exit.c builtins/export.c builtins/export_print.c \
+			  builtins/export_sort.c builtins/ident.c builtins/pwd.c \
+			  builtins/unset.c
 
 SRCS		= $(MAIN) $(ENV) $(EXECUTOR) $(HEREDOC) $(LEXER) $(PARSER) \
 			  $(SHELL_SRC) $(UTILS) $(SIGNALS) $(EXPANDER) $(BUILTINS)

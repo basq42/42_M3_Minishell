@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:22:24 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/27 11:36:39 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 11:31:05 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	run_builtin_parent(t_shell *sh, t_cmd *cmd)
 		return (1);
 	}
 	if (apply_redirs(cmd->redirs) == 0)
-		status = PLACE_HOLDER_RUN_BUILTIN_FUNC(sh, cmd->argv);
+		status = run_builtin(sh, cmd->argv);
 	else
 		status = 1;
 	dup2(sh->saved_in, STDIN_FILENO);
@@ -101,7 +101,7 @@ int	execute(t_shell *sh)
 	if (cmd == NULL)
 		return (0);
 	if (cmd->next == NULL && cmd->argv != NULL && cmd->argv[0] != NULL
-		&& PLACE_HOLDER_IS_BUILTIN_FUNC(cmd->argv[0]))
+		&& is_builtin(cmd->argv[0]))
 		return (run_builtin_parent(sh, cmd));
 	return (run_pipeline(sh));
 }

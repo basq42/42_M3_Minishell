@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:17:45 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/28 17:26:35 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 11:27:09 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,15 @@ typedef struct s_pipe
 	int				fd[2];
 	pid_t			last_pid;
 }	t_pipe;
+
+typedef struct s_wscan
+{
+	char			*buf;
+	char			**fields;
+	int				touched;
+	int				sq;
+	int				dq;
+}	t_wscan;
 
 /* shell/shell_init.c */
 int			shell_init(t_shell *sh, char **envp);
@@ -171,14 +180,32 @@ int			check_exec_path(char *name, char *path);
 /* executor/redirect.c */
 int			apply_redirs(t_redir *redir);
 
-/* expander/ (Bahktiyor) */
-int			PLACE_HOLDER_EXPAND_CMDS_FUNC(t_shell *sh);
-char		*PLACE_HOLDER_EXPAND_STRING_FUNC(t_shell *sh, char *s);
-char		*PLACE_HOLDER_REMOVE_QUOTES_FUNC(char *s);
+/* expander	*/
+int			expand_cmds(t_shell *sh);
+char		**expand_word(t_shell *sh, char *raw);
+char		*read_var(t_shell *sh, char *raw, int *i);
+int			field_close(t_wscan *st);
+int			field_emit(t_wscan *st, char c, int quoted);
+char		*char_to_str(char c);
+char		*join_free(char *a, char *b);
+char		*remove_quotes(char *s);
+char		*expand_string(t_shell *sh, char *s);
 
-/* builtins/ (Bahktiyor) */
-int			PLACE_HOLDER_IS_BUILTIN_FUNC(char *name);
-int			PLACE_HOLDER_RUN_BUILTIN_FUNC(t_shell *sh, char **argv);
+/* builtins	*/
+int			is_builtin(char *name);
+int			run_builtin(t_shell *sh, char **argv);
+int			bt_echo(char **argv);
+int			bt_cd(t_shell *sh, char **argv);
+int			bt_pwd(t_shell *sh);
+int			bt_export(t_shell *sh, char **argv);
+int			bt_unset(t_shell *sh, char **argv);
+int			bt_env(t_shell *sh);
+int			bt_exit(t_shell *sh, char **argv);
+char		*build_new_pwd(char *old_pwd, char *target);
+int			push_component(char ***stack, char *seg);
+int			print_export(t_shell *sh);
+t_env		**sorted_env(t_env *env);
+int			is_valid_identifier(char *s);
 
 /* signals/signal.c */
 void		set_sig_int_quit(void (*on_sigint)(int), void (*on_sigquit)(int));

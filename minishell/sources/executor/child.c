@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:20:04 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/28 17:27:40 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 11:31:29 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ void	child_process(t_shell *sh, t_cmd *cmd, t_pipe *p)
 		shell_exit(sh, 1);
 	if (cmd->argv == NULL || cmd->argv[0] == NULL)
 		shell_exit(sh, 0);
-	if (PLACE_HOLDER_IS_BUILTIN_FUNC(cmd->argv[0]))
-		shell_exit(sh, PLACE_HOLDER_RUN_BUILTIN_FUNC(sh, cmd->argv));
+	if (is_builtin(cmd->argv[0]))
+		shell_exit(sh, run_builtin(sh, cmd->argv));
 	exec_external(sh, cmd->argv);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:24:05 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/28 17:28:35 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 11:29:59 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static int	hd_read_loop(t_shell *sh, int fd, char *dlm, int expand)
 		}
 		if (expand)
 		{
-			expanded = PLACE_HOLDER_EXPAND_STRING_FUNC(sh, line);
+			expanded = expand_string(sh, line);
 			free(line);
 			if (!expanded)
 				return (1);
@@ -128,7 +128,7 @@ void	hd_child(t_shell *sh, t_redir *redir)
 		print_error(redir->hd_path, strerror(errno), NULL);
 		shell_exit(sh, 1);
 	}
-	dlm = PLACE_HOLDER_REMOVE_QUOTES_FUNC(redir->file);
+	dlm = remove_quotes(redir->file);
 	if (!dlm)
 	{
 		close(fd);

@@ -6,12 +6,15 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:06:58 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:07:51 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 11:35:47 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * Moves each field into the new argv (which argv_append copies)
+ * */
 static int	splice_fields(t_cmd *scratch, char **fields)
 {
 	int	j;
@@ -28,6 +31,12 @@ static int	splice_fields(t_cmd *scratch, char **fields)
 	return (status);
 }
 
+/*
+ * Rebuilds argv to make each raw word into 0+ fields.
+ * 	$NE			-> 0 fields
+ * 	"$NE"		-> 1 empty field ("" kept)
+ * 	$A="a b"	-> 2 fields (word splitting)
+ * */
 static int	expand_argv(t_shell *sh, t_cmd *cmd)
 {
 	t_cmd	*scratch;

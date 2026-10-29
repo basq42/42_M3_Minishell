@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:26:38 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/23 11:26:55 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 11:29:21 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	run_cmds(t_shell *sh)
 	status = heredoc_collect(sh);
 	if (status == 0)
 	{
-		status = PLACE_HOLDER_EXPAND_CMDS_FUNC(sh);
+		status = expand_cmds(sh);
 		if (status != 0)
 			print_error("out of memory", NULL, NULL);
 		else
