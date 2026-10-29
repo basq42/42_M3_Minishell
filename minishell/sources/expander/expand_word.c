@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/29 11:07:20 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 11:07:22 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/29 16:44:35 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,35 @@ static int	init_wscan(t_wscan *st)
 	return (0);
 }
 
+/*
+ * ISSUE: In bash $"..." is a locale translation syntax, while $'...' is an
+ * escape-sequence syntax. When either appears outside double quotes, bash
+ * drops the $ and reads the quoted part as is. Inside quotes, "$" is a literal
+ * $
+ * 		INPUT			BASH PRINT			minishell print (old)
+ * 		echo $"USER"		USER				$USER
+ * 		echo $'abc'			abc					$abc
+ * 		echo "$"			$					$
+ * 		echo "a$"			a$					a$
+ * 	Why the DIFF: scan_dollar hands all $ to read_var. When the next char is a
+ * 	quote (neither a letter, nor _), read_var takes the 'else' branch and
+ * 	returns the literal "$" to then process the quote normally, leading to the
+ * 	output starting with $ followed by quoted text.
+ * 	FIX: check if:
+ * 		$ is outside double quotes and directly before a quote	->skip $ and
+ * 		emit nothing.
+ * */
 static int	scan_dollar(t_shell *sh, char *raw, int *i, t_wscan *st)
 {
 	char	*sub;
 	int		j;
 	int		status;
 
+	if (!st->dq && (raw[*i + 1] == '"' || raw[*i + 1] == '\''))
+	{
+		(*i)++;
+		return (0);
+	}
 	sub = read_var(sh, raw, i);
 	if (!sub)
 		return (1);
