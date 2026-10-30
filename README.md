@@ -1,15 +1,3 @@
-!!!IMPORTANT: the AI's pwd stub has the following issue:
-minishell$ mkdir -p 1/2/3/4/5; cd 1/2/3/4/5; rm -r ../../../../../1; pwd
-minishell: pwd: No such file or directory
-------------------------------------------
-minishell$ """"""""""; cd ~/Desktop
-minishell: cd: ~/Desktop/: No such file or directory
-------------------------------------------
-Issue of AI stub: calls getcwd(NULL, 0) to ask KERNEL for the CURRENT PATH and hence fails with ENOENT leading to the pwd: No such file or directory error and returns 1 for status.
-WHAT BASH DOES AS PER BASH MANUAL:save the logical path in its PWD variable, update it on EVERY CD, and prints that string and NEVER asks KERNEL.
-
-For cd ~/Desktop: pdf says 'cd with only relative or absolute path' so I am guessing no need for tilde expansion?
-
 # Structure
 <pre>
 minishell/
