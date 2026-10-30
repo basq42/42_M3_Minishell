@@ -18,7 +18,7 @@ The goal of the project is to understand how a shell works underneath: processes
 - Environment variables (`$NAME`) and the last exit status (`$?`).
 - ctrl-C prints a new prompt, ctrl-D exits the shell, ctrl-\ does nothing (at the prompt, as in bash).
 - Builtins: `echo` with `-n`, `cd` with a relative or absolute path, `pwd`, `export`, `unset`, `env`, `exit`.
-- Only one global variable, which holds the number of the received signal.
+- Only one global variable, which holds the number of the received signal. The handler receives nothing but that number and cannot reach sh, which is a local of main. Additionally, handler calls the respective readline functions which are not async-signal-safe. So the handler stores the number in a volatile sig_atomic_t, and main reads it after readline returns and sets $? to 130. volatile stops the compiler from caching it, and sig_atomic_t guarantees the write is atomic.
 
 Not implemented (bonus part): `&&`, `||`, parentheses, `*` wildcards, `;`, `\`, and unclosed quotes (reported as a syntax error).
 
