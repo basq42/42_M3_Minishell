@@ -6,7 +6,7 @@
 /*   By: bkelav <bkelav@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 11:22:30 by bkelav            #+#    #+#             */
-/*   Updated: 2026/10/29 14:56:12 by bkelav           ###   ########.fr       */
+/*   Updated: 2026/10/30 09:29:23 by bkelav           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,15 @@
  * 	Returns: the new fd on ok, -1 on fail with errno set by open()
  * 	Caller: apply_redirs()
  * */
-/*	NEW: field check for 'ambiguous redirect' as bash does.
+/*	NEW: For heredoc files: field check for 'ambiguous redirect' as bash does.
+ *	+ unlink right after opening: file data stays alive as long as >=1 fd refers
+ *	to it so unlinkin only removes name, hence file gets cleaned after process
+ *	is done (no more fd referral to that file).
  * */
 static int	open_redir(t_redir *redir)
 {
+	int	fd;
+
 	if (redir->ambiguous)
 	{
 		print_error(redir->file, "ambiguous redirect", NULL);
@@ -38,7 +43,10 @@ static int	open_redir(t_redir *redir)
 		return (open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644));
 	if (redir->type == T_APPEND)
 		return (open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644));
-	return (open(redir->hd_path, O_RDONLY));
+	fd = open(redir->hd_path, O_RDONLY);
+	if (fd != -1)
+		unlink(redir->hd_path);
+	return (fd);
 }
 
 /*
