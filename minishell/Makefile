@@ -74,5 +74,11 @@ fclean: clean
 	rm -f $(NAME)
  
 re: fclean all
+
+# ===============VG Rules=================== #
+VG_FLAGS	= --leak-check=full --track-fds=yes --trace-children=yes
+
+valgrind: $(NAME)
+	valgrind $(VG_FLAGS) ./$(NAME)
  
-.PHONY: all clean fclean re libft_update
+.PHONY: all clean fclean re libft_update valgrind
